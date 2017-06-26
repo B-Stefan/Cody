@@ -18,7 +18,9 @@ describe('bot test', function() {
   });
 
   it('hi', function(){
-    const theScript = new BotTester.Script('132', '20');
+    let userId  = "1234";
+    let pageId  = "13415123";
+    const theScript = new BotTester.Script(userId, pageId);
     theScript.sendTextMessage('hi');  //mock user sending "hi"
     theScript.expectTextResponses([   //either response is valid
       'Hey!',
