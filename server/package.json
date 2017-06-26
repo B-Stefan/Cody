@@ -4,7 +4,7 @@
   "description": "A Chatbot to classify developers (frontend / backend) ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha tests "
   },
   "author": "Stefan Bieliauskas",
   "license": "MIT",
