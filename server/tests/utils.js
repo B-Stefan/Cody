@@ -6,10 +6,13 @@ function createTestEnvironment(port) {
 
   // webHookURL points to where yout bot is currently listening
   // choose a port for the test framework to listen on
-  const testingPort = port + 100 ;
-  const webHookURL = 'http://localhost:' + port + '/';
-  const tester = new BotTester.default(testingPort, webHookURL);
-  const server = new Server({graph_url: `http://localhost:${testingPort}/v2.6`});
+  let testingPort = port + 100 ;
+  let webHookURL = `http://localhost:${port}/`;
+  let tester = new BotTester.default(testingPort, webHookURL);
+  let server = new Server({
+    port: port,
+    graph_url: `http://localhost:${testingPort}/v2.6`
+  });
 
 
   return {
