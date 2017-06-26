@@ -1,6 +1,8 @@
 const BotTester = require('messenger-bot-tester');
 const Server = require("./../src/server");
-describe('bot test', function() {
+const Conversation = require("./../src/conversation");
+const {expect,should} = require("chai");
+describe('Server test', function() {
   // webHookURL points to where yout bot is currently listening
   // choose a port for the test framework to listen on
   const testingPort = 3100;
@@ -17,15 +19,26 @@ describe('bot test', function() {
     return Promise.all([testerPromise, serverPromise])
   });
 
-  it('hi', function(){
+  it('Should create conversations for each user', function(){
     let userId  = "1234";
     let pageId  = "13415123";
-    const theScript = new BotTester.Script(userId, pageId);
-    theScript.sendTextMessage('hi');  //mock user sending "hi"
-    theScript.expectTextResponses([   //either response is valid
-      'Hey!',
-      'Welcome',
-    ]);
-    return tester.runScript(theScript);
+
+    let testScripts = [
+      new BotTester.Script(userId, pageId),
+      new BotTester.Script(userId+"-1", pageId)
+    ];
+
+    testScripts.forEach((script)=>{
+      script.sendTextMessage("Init msg")
+    });
+
+
+    let testPromises = testScripts.map((script)=>tester.runScript(script));
+    return Promise.all(testPromises).then(()=>{
+      expect(Object.keys(server.conversations).length).to.equal(2);
+      expect(server.conversations[userId]).to.be.an.instanceOf(Conversation);
+      expect(server.conversations[userId+"-1"]).to.be.an.instanceOf(Conversation);
+    });
+
   });
 });

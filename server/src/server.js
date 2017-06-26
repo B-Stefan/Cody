@@ -1,6 +1,6 @@
 const http = require('http');
 const Bot = require('messenger-bot');
-
+const Conversation = require("./conversation");
 const DEFAULT_OPTS ={
   port: 3000,
   token: "YOUR_PAGE_TOKEN",
@@ -18,8 +18,19 @@ class Server {
     this.app_secret   = opts.app_secret? opts.app_secret : DEFAULT_OPTS.app_secret;
     this.verify_token = opts.verify_token? opts.verify_token : DEFAULT_OPTS.verify_token;
 
+    this.conversations = {}
   }
 
+  getOrCreateConversation(userId){
+
+    if(typeof this.conversations[userId] === "undefined"){
+       this.conversations[userId] = new Conversation(userId)
+    }
+    return this.conversations[userId]
+  }
+  /**
+   * Create a new instance of the bot
+   */
   createBot(){
     this.bot = new Bot({
       "graph_url": this.graph_url,
@@ -34,6 +45,8 @@ class Server {
 
     this.bot.on('message', (payload, reply) => {
       let text = payload.message.text;
+      console.log("new msg");
+      let conversation = this.getOrCreateConversation(payload.sender.id);
 
       this.bot.getProfile(payload.sender.id, (err, profile) => {
         if (err) throw err;
