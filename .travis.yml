@@ -1,0 +1,9 @@
+language: node_js
+
+before_script:
+  - cd cient && npm install && cd ..
+  - cd server && npm install && cd ..
+
+script:
+  - cd cient && npm test && cd ..
+  - cd server && npm test && cd ..
