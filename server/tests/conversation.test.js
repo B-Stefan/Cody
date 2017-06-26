@@ -41,4 +41,78 @@ describe('Conversation test', function() {
 
   });
 
+  describe('Worked with skill test', function() {
+
+    it('Should detect a single programming language ', function () {
+
+      let conversation = new Conversation("user-3");
+
+      return conversation.processMessage("I worked with java").then((msgs) => {
+
+        expect(msgs).to.be.instanceof(Array);
+        expect(msgs.length).to.be.equal(1);
+        let first = msgs.pop();
+        expect(first).to.be.instanceOf(Object);
+        expect(first.type).to.exist;
+        expect(first.content).to.exist;
+        expect(first.content).to.deep.equal([
+          "Oh well you know already some languages *top*. I detected java",
+          "But ... come on there is more that you know... :)"
+        ]);
+
+      })
+
+    });
+
+    it('Should not detect programming language', function () {
+
+      let conversation = new Conversation("user-3");
+
+      return conversation.processMessage("I worked with something but no programming language").then((msgs) => {
+
+        expect(msgs).to.be.instanceof(Array);
+        expect(msgs.length).to.be.equal(1);
+        let first = msgs.pop();
+        expect(first).to.be.instanceOf(Object);
+        expect(first.type).to.exist;
+        expect(first.content).to.exist;
+        expect(first.content).to.equal('Sorry but I did\'t understood your language');
+
+      })
+
+    });
+
+    it('Should detect multiple programming languages ', function () {
+
+      let conversation = new Conversation("user-3");
+
+      let testA = conversation.processMessage("I worked with java and python ").then((msgs) => {
+
+        expect(msgs).to.be.instanceof(Array);
+        expect(msgs.length).to.be.equal(1);
+        let first = msgs.pop();
+        expect(first.content).to.deep.equal([
+          "Oh well you know already some languages *top*. I detected java,python",
+          "But ... come on there is more that you know... :)"
+        ]);
+
+      });
+      let testB = conversation.processMessage("I worked with java, python and C#").then((msgs) => {
+
+
+        expect(msgs).to.be.instanceof(Array);
+        expect(msgs.length).to.be.equal(1);
+        let first = msgs.pop();
+        expect(first.content).to.deep.equal([
+          "Oh well you know already some languages *top*. I detected java,python,c#",
+          "But ... come on there is more that you know... :)"
+        ]);
+
+      });
+
+      return Promise.all([testA, testB])
+
+    });
+  })
+
 });
