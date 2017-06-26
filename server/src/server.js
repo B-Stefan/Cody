@@ -19,27 +19,23 @@ class Server {
     this.verify_token = opts.verify_token? opts.verify_token : DEFAULT_OPTS.verify_token;
 
   }
-  /**
-   * Start the server and return a promise
-   * @returns {Promise}
-   */
-  start(){
 
-    let bot = new Bot({
+  createBot(){
+    this.bot = new Bot({
       "graph_url": this.graph_url,
       "token": this.page_token,
       "app_secret": this.app_secret,
       "verify_token": this.verify_token
     });
 
-    bot.on('error', (err) => {
+    this.bot.on('error', (err) => {
       console.log(err.message)
     });
 
-    bot.on('message', (payload, reply) => {
+    this.bot.on('message', (payload, reply) => {
       let text = payload.message.text;
 
-      bot.getProfile(payload.sender.id, (err, profile) => {
+      this.bot.getProfile(payload.sender.id, (err, profile) => {
         if (err) throw err;
 
         reply({ text }, (err) => {
@@ -49,9 +45,18 @@ class Server {
         })
       })
     });
+  }
+
+  /**
+   * Start the server and return a promise
+   * @returns {Promise}
+   */
+  start(){
+
+    this.createBot();
 
     return new Promise((resolve,reject)=>{
-      http.createServer(bot.middleware()).listen(this.port, (err)=>{
+      http.createServer(this.bot.middleware()).listen(this.port, (err)=>{
         if(err){
           reject(err)
         }
