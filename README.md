@@ -1,4 +1,6 @@
 # Cody
+[![Build Status](https://travis-ci.org/B-Stefan/Cody.svg?branch=master)](https://travis-ci.org/B-Stefan/Cody)
+
 A bot that helps you choosing between frontend and backend developer 
 
 
