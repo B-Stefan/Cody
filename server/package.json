@@ -4,6 +4,7 @@
   "description": "A Chatbot to classify developers (frontend / backend) ",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js ",
     "test": "./node_modules/.bin/mocha tests "
   },
   "author": "Stefan Bieliauskas",
