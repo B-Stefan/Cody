@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "chai": "^4.0.2",
-    "messenger-bot": "^2.4.0"
+    "messenger-bot": "^2.4.0",
+    "talkify": "^2.1.0"
   }
 }

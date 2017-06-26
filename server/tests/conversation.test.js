@@ -2,47 +2,43 @@ const BotTester = require('messenger-bot-tester');
 const Server = require("./../src/server");
 const Conversation = require("./../src/conversation");
 const {expect,should} = require("chai");
-const {createTestEnvironment} = require("./utils")
 describe('Conversation test', function() {
 
-  const testEnv = createTestEnvironment(3001);
+  it('Should start a conversation', function(){
 
-  const tester = testEnv.tester;
-  const server = testEnv.server;
+    let conversation = new Conversation("user-1");
 
-  before(function(){
-    // start your own bot here or having it running already in the background
-    // redirect all Facebook Requests to http://localhost:3100/v2.6 and not https://graph.facebook.com/v2.6
+    return conversation.processMessage("Hi").then((msgs)=>{
 
-    return testEnv.start()
-  });
+      expect(msgs).to.be.instanceof(Array);
+      expect(msgs.length).to.be.equal(1);
+      let first = msgs.pop();
+      expect(first).to.be.instanceOf(Object);
+      expect(first.type).to.exist;
+      expect(first.content).to.exist;
+      expect(first.content).to.equal('You asked: "Hi". I\'m doing well. Thanks for asking.');
+    })
 
-  it('Should answer the user with hi', function(){
-    let userId  = "1234";
-    let pageId  = "13415123";
-
-    let testScripts = [
-      new BotTester.Script(userId, pageId),
-      new BotTester.Script(userId+"-1", pageId)
-    ];
-
-    testScripts.forEach((script)=>{
-      script.sendTextMessage("Init msg")
-    });
-
-
-    let testPromises = testScripts.map((script)=>tester.runScript(script));
-    return Promise.all(testPromises).then(()=>{
-      expect(Object.keys(server.conversations).length).to.equal(2);
-      expect(server.conversations[userId]).to.be.an.instanceOf(Conversation);
-      expect(server.conversations[userId+"-1"]).to.be.an.instanceOf(Conversation);
-    });
 
   });
 
-  after(function () {
-    //Cause node errors.... :(
-    //return testEnv.stop()
-  })
+
+  it('Should help me', function(){
+
+    let conversation = new Conversation("user-2");
+
+    return conversation.processMessage("Please, help me").then((msgs)=>{
+
+      expect(msgs).to.be.instanceof(Array);
+      expect(msgs.length).to.be.equal(1);
+      let first = msgs.pop();
+      expect(first).to.be.instanceOf(Object);
+      expect(first.type).to.exist;
+      expect(first.content).to.exist;
+      expect(first.content).to.equal('You asked: "Please, help me". I can tell you how I\'m doing if you ask nicely.');
+    })
+
+
+  });
 
 });
