@@ -11,7 +11,7 @@ function createTestEnvironment(port) {
   let tester = new BotTester.default(testingPort, webHookURL);
   let server = new Server({
     port: port,
-    graph_url: `http://localhost:${testingPort}/v2.6`
+    graph_url: `http://localhost:${testingPort}/v2.6/`
   });
 
 

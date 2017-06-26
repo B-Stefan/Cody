@@ -55,7 +55,6 @@ class Server {
           let text = msg.content;
           reply({text}, (err) => {
             if (err) throw err;
-            console.log(`Echoed back to ${profile.first_name} ${profile.last_name}: ${text}`)
           })
         });
 
@@ -64,6 +63,7 @@ class Server {
       this.bot.getProfile(payload.sender.id, (err, profile) => {
         if (err) throw err;
 
+        console.log(`Echoed back to ${profile.first_name} ${profile.last_name}: ${text}`)
 
       })
     });
