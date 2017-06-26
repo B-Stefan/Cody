@@ -67,9 +67,10 @@ class Server {
   start(){
 
     this.createBot();
+    this.httpServer = http.createServer(this.bot.middleware());
 
     return new Promise((resolve,reject)=>{
-      http.createServer(this.bot.middleware()).listen(this.port, (err)=>{
+      this.httpServer.listen(this.port, (err)=>{
         if(err){
           reject(err)
         }
@@ -77,6 +78,18 @@ class Server {
       });
     });
 
+  }
+  stop(){
+    return new Promise((resolve,reject)=>{
+
+      this.httpServer.close((err)=>{
+        if(err){
+          reject(err)
+        }
+        resolve()
+      })
+
+    })
   }
 }
 module.exports = Server;
